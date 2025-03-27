@@ -1,47 +1,66 @@
-'use client';
+"use client";
 
 import { useGetWeather } from "@/lib/hooks/useWeather";
 import { getFormattedDate, getFormattedTime } from "@/lib/utils/dateTime";
-import { Bell, Calender, Clock, Cloud, School, Thermometer } from "@/resource/icons";
-import { Card, CardBody, CardFooter, CardHeader, Divider } from "@heroui/react";
+import {
+  Bell,
+  Calender,
+  Clock,
+  Cloud,
+  RefreshCW,
+  School,
+  Thermometer,
+} from "@/resource/icons";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+} from "@heroui/react";
 import React from "react";
+import { toast } from "sonner";
 
 const SchoolWeather = () => {
-  const { data } = useGetWeather();
-
+  const { data, isFetching, refetch } = useGetWeather();
 
   const WeatherData = [
     {
       label: "Kualitas Udara",
       icon: <Cloud />,
-      value: data || 'Baik',
+      value: data?.airQuality || "-",
     },
     {
       label: "Kelembapan ",
       icon: <Cloud />,
-      value: "70%",
+      value: data?.humidity || "0%",
     },
     {
       label: "Curah Hujan",
       icon: <Cloud />,
-      value: "20mm",
+      value: data?.rainfall || "0 mm",
     },
     {
       label: "Kualitas Air",
       icon: <Cloud />,
-      value: "Bersih",
+      value: data?.waterQuality || "-",
     },
     {
       label: "Efisiensi Listrik",
       icon: <Cloud />,
-      value: "90%",
+      value: data?.electricityEfficiency || "0 kWh",
     },
     {
       label: "Kondisi Penerangan",
       icon: <Cloud />,
-      value: "Cukup",
+      value: data?.lightingCondition || "-",
     },
   ];
+
+  if (isFetching) {
+    toast.info("Memuat data...");
+  }
 
   return (
     <>
@@ -49,24 +68,34 @@ const SchoolWeather = () => {
         <CardHeader className="flex flex-col items-start gap-4">
           {/* Header */}
           <div className="w-full flex items-center justify-between sm:gap-4 sm:justify-start">
-            <small className="gap-2 items-center hidden sm:flex">
+            <small className="min-w-max gap-2 items-center hidden sm:flex">
               <School size={18} />
-              SMKN 1 Kawali 
+              SMKN 1 Kawali
             </small>
 
             <Divider orientation="vertical" className="h-4 hidden sm:block" />
 
-            <small className="flex gap-2 items-center">
+            <small className="min-w-max flex gap-2 items-center">
               <Calender size={18} />
-              {getFormattedDate('dddd, DD MMM')}
+              {getFormattedDate("dddd, DD MMM")}
             </small>
 
             <Divider orientation="vertical" className="h-4" />
 
-            <small className="flex gap-2 items-center">
+            <small className="min-w-max sm:w-full flex gap-2 items-center">
               <Clock size={18} />
-             {getFormattedTime()} WIB
+              {getFormattedTime()} WIB
             </small>
+
+            <Button
+              className="hidden sm:block"
+              isIconOnly
+              variant="light"
+              isDisabled={isFetching}
+              onPress={() => refetch()}
+            >
+              <RefreshCW size={18} />
+            </Button>
           </div>
 
           <Divider />
@@ -79,7 +108,9 @@ const SchoolWeather = () => {
 
             <div>
               <h2>25°C</h2>
-              <p className="text-zinc-800 dark:text-zinc-200">Kondisi saat ini</p>
+              <p className="text-zinc-800 dark:text-zinc-200">
+                Kondisi saat ini
+              </p>
             </div>
           </div>
         </CardHeader>
@@ -99,9 +130,9 @@ const SchoolWeather = () => {
         </CardBody>
 
         <CardFooter>
-          <span className="flex gap-2 items-center pt-2 border-t w-full">
+          <span className="flex gap-2 items-center pt-4 border-t w-full">
             <Bell size={20} />
-            <p>Peringatan: -</p>
+            <p>Peringatan: {data?.warningSystem || "Tidak ada peringatan"}</p>
           </span>
         </CardFooter>
       </Card>
