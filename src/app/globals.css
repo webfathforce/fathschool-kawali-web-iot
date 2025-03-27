@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-inter: "inter", sans-serif;
+  --font-workSans: "work-sans", sans-serif;
+}
+
+@layer base {
+
+  * {
+    @apply dark:border-zinc-600
+  }
+
+  body {
+    @apply relative w-full min-h-screen bg-zinc-50 dark:bg-zinc-950 font-inter;
+  }
+
+  h1 {
+    @apply text-5xl font-bold;
+  }
+
+  h2 {
+    @apply text-4xl font-bold;
+  }
+
+  h3 {
+    @apply text-3xl font-bold;
+  }
+
+  h4 {
+    @apply text-2xl font-semibold;
+  }
+
+  h5 {
+    @apply text-xl font-semibold;
+  }
+
+  h6 {
+    @apply text-lg font-semibold;
+  }
+
+  p {
+    @apply text-small font-medium text-zinc-500 tracking-wide;
+  }
+}
