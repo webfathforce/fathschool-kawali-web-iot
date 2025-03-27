@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetWeather } from "@/lib/hooks/useWeather";
+import { getTemperatureClass, parseTemperature } from "@/lib/utils/basic";
 import { getFormattedDate, getFormattedTime } from "@/lib/utils/dateTime";
 import {
   Bell,
@@ -39,7 +40,7 @@ const SchoolWeather = () => {
     {
       label: "Curah Hujan",
       icon: <Cloud />,
-      value: data?.rainfall || "0 mm",
+      value: data?.rainfall || "0mm",
     },
     {
       label: "Kualitas Air",
@@ -49,7 +50,7 @@ const SchoolWeather = () => {
     {
       label: "Efisiensi Listrik",
       icon: <Cloud />,
-      value: data?.electricityEfficiency || "0 kWh",
+      value: data?.electricityEfficiency || "0%",
     },
     {
       label: "Kondisi Penerangan",
@@ -101,13 +102,17 @@ const SchoolWeather = () => {
           <Divider />
 
           {/* Suhu Saat Ini */}
-          <div className="flex items-center gap-4 p-2 rounded-xl bg-gradient-to-r from-orange-200/70 to-orange-100 dark:from-orange-900/70 dark:to-orange-800/15 text-orange-500 w-full">
-            <div className="bg-orange-600/15 text-orange-500 p-3 rounded-full">
+          <div
+            className={`flex items-center gap-4 p-2 rounded-xl bg-gradient-to-r w-full ${getTemperatureClass(
+              parseTemperature(data?.temperature as string)
+            )}`}
+          >
+            <div className={`p-3 rounded-full ${parseTemperature(data?.temperature as string) < 20 ? "bg-blue-600/15 text-blue-500": "bg-orange-600/15 text-orange-500"}`}>
               <Thermometer size={32} />
             </div>
 
             <div>
-              <h2>25°C</h2>
+              <h2>{data?.temperature || "0°C"}</h2>
               <p className="text-zinc-800 dark:text-zinc-200">
                 Kondisi saat ini
               </p>

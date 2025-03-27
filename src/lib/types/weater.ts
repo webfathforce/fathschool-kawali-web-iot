@@ -1,5 +1,5 @@
 export interface RESPONSE_WEATHER {
-  airQuality: string;
+  airQuality: string | number;
   temperature: string | number;
   humidity: string | number;
   rainfall: string | number;
